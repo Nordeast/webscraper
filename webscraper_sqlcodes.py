@@ -12,7 +12,7 @@ import csv
 
 ############ CONSTANTS ############
 
-reason_code_page_url = 'https://www.ibm.com/support/knowledgecenter/SSEPEK_12.0.0/codes/src/tpc/db2z_reasoncodes.html?view=embed'
+reason_code_page_url = 'https://www.ibm.com/support/knowledgecenter/SSEPEK_12.0.0/codes/src/tpc/db2z_n.html?view=embed'
 url_base = "https://www.ibm.com/support/knowledgecenter/SSEPEK_12.0.0/codes/"
 url_view_embed = "?view=embed"
 
@@ -51,6 +51,12 @@ def reason_code_dict_from_soup(reason_code_soup):
         code_number = span_tag.get_text()
 
     span_tag = reason_code_soup.find(
+        'span', class_="msgText")
+    msg_text = ""
+    if span_tag:
+        msg_text = span_tag.get_text()
+
+    span_tag = reason_code_soup.find(
         'section', class_="msgExplanation")
     explanation = ""
     if span_tag:
@@ -80,6 +86,18 @@ def reason_code_dict_from_soup(reason_code_soup):
     if span_tag:
         problem_determination = span_tag.get_text()
 
+    span_tag = reason_code_soup.find(
+        'section', class_="msgUserResponse")
+    user_response = ""
+    if span_tag:
+        user_response = span_tag.get_text()
+
+    span_tag = reason_code_soup.find(
+        'section', class_="msgOther")
+    sql_state = ""
+    if span_tag:
+        sql_state = span_tag.get_text()
+
     # Strip out newlines and unicode characters
     code_number = code_number.replace(
         "\\n", " ").encode('ascii', 'ignore')
@@ -95,16 +113,20 @@ def reason_code_dict_from_soup(reason_code_soup):
         "\\n", " ").encode('ascii', 'ignore')
     problem_determination = problem_determination.replace(
         "\\n", " ").encode('ascii', 'ignore')
+    sql_state = sql_state.replace(
+        "\\n", " ").encode('ascii', 'ignore')
 
     # Create dictionary and save to reason_code_dictionaries array
     reason_code_dict = {
         'code_number': code_number,
+        'msg_text': msg_text,
         'explanation': explanation,
         'system_action': system_action,
         'operator_response': operator_response,
         'system_programmer_response': system_programmer_response,
         'user_response': user_response,
-        'problem_determination', problem_determination
+        'problem_determination': problem_determination,
+        'sql_state': sql_state
     }
 
     return reason_code_dict
@@ -118,7 +140,7 @@ def reason_code_dict_from_soup(reason_code_soup):
 program_start_time = datetime.now()
 
 # Array to store the reason code dictionaries once they have been scraped
-reason_code_dictionaries = []
+sql_code_dictionaries = []
 
 #### START SCRAPE ####
 
@@ -131,51 +153,58 @@ main_page_soup = soup_from_browser_and_url(browser, reason_code_page_url)
 main_page_link_spans = main_page_soup.find_all(
     'span', class_="ulchildlinktext")
 
-# Loop through main page reason code groups
 for span in main_page_link_spans:
     a_tag = span.find("a")
-    group_url = a_tag['href'].replace("../../", "")
+    sql_code_url = a_tag['href'].replace("../../", "")
 
     # Load group page and get soup
-    child_page_soup = soup_from_browser_and_url(
-        browser, url_base + group_url + url_view_embed)
+    sql_code_page = soup_from_browser_and_url(
+        browser, url_base + sql_code_url + url_view_embed)
+    # Parse reason code page
+    sql_code_dict = reason_code_dict_from_soup(sql_code_page)
 
-    # Get the links to the individual code pages
-    child_page_link_spans = child_page_soup.find_all(
-        'span', class_="ulchildlinktext")
+    # Append to array
+    sql_code_dictionaries.append(sql_code_dict)
+    print(sql_code_dict)
 
-    for span in child_page_link_spans:
-        a_tag = span.find("a")
-        reason_code_url = a_tag['href'].replace("../../", "")
-
-        # Load reason code page and get soup
-        reason_code_soup = soup_from_browser_and_url(
-            browser, url_base + reason_code_url + url_view_embed)
-        # Parse reason code page
-        reason_code_dict = reason_code_dict_from_soup(reason_code_soup)
-        # Append to array
-        reason_code_dictionaries.append(reason_code_dict)
-# END LOOPS
+browser.close()
 
 #### END SCRAPE ####
 
 #### WRITE TO CSV ####
 
 # Write dictionaries to csv
-csv_name = "reason_codes_" + datetime.now().replace(microsecond=0).isoformat() + ".csv"
+csv_name = "sql_codes_" + datetime.now().replace(microsecond=0).isoformat() + ".csv"
 with open(csv_name, 'w') as csv_file:
     writer = csv.writer(csv_file)
     # Heading row
-    writer.writerow(['code_number', 'explanation',
-                     'system_action', 'operator_response', 'system_programmer_response', 'user_response'])
+    writer.writerow(['code_number', 'msg_text', 'explanation',
+                     'system_action', 'operator_response', 'system_programmer_response', 'user_response', 'problem_determination', 'sql_state'])
+    
     # Loop through dictionaries and write a csv row for each
-    for dictionary in reason_code_dictionaries:
-        writer.writerow([dictionary['code_number'],
+    for dictionary in sql_code_dictionaries:
+        code_number = '*Code Number*' + dictionary['code_number'] + '*End Code Number*'
+        problem_determination = '**' + dictionary['problem_determination'] + '*End Problem determination*'
+        problem_determination = '*Problem determination*' + dictionary['problem_determination'] + '*End Problem determination*'
+        problem_determination = '*Problem determination*' + dictionary['problem_determination'] + '*End Problem determination*'
+        problem_determination = '*Problem determination*' + dictionary['problem_determination'] + '*End Problem determination*'
+        problem_determination = '*Problem determination*' + dictionary['problem_determination'] + '*End Problem determination*'
+        problem_determination = '*Problem determination*' + dictionary['problem_determination'] + '*End Problem determination*'
+        problem_determination = '*Problem determination*' + dictionary['problem_determination'] + '*End Problem determination*'
+        problem_determination = '*Problem determination*' + dictionary['problem_determination'] + '*End Problem determination*'
+        problem_determination = '*Problem determination*' + dictionary['problem_determination'] + '*End Problem determination*'
+
+        writer.writerow('*Start Page*',
+                         [dictionary['code_number'],
+                         dictionary['msg_text'],
                          dictionary['explanation'],
                          dictionary['system_action'],
                          dictionary['operator_response'],
                          dictionary['system_programmer_response'],
-                         dictionary['user_response']])
+                         dictionary['user_response'],
+                         dictionary['problem_determination'],
+                         dictionary['sql_state']],
+                         '*End Page*')
 
 print("csv written with name: " + csv_name)
 
