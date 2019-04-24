@@ -2,6 +2,7 @@
 DICT_TAG = 'tag'
 DICT_CLASS = 'class'
 DICT_KEY = 'key'
+DICT_URL = 'url'
 
 PARSE_DICT = [
     {
