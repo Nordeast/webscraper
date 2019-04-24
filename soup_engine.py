@@ -112,32 +112,12 @@ def dict_from_soup(soup):
 
     return reason_code_dict
 
-
-def parse(soup):
-    for child in soup.find('section', class_="msgExplanation").children:
-        going(child, '')
-
-
-def going(tag, spacing):
-    if type(tag) is bs4.element.Tag:
-        if tag.name == 'ul':
-            print_and_continue(tag, 'ul', spacing + ' ul')
-        elif tag.name == 'div':
-            print_and_continue(tag, 'div', spacing + ' div')
-        elif tag.name == 'li':
-            print_and_continue(tag, 'li', spacing + ' li')
-        elif tag.name == 'p':
-            print_and_continue(tag, 'p', spacing + ' p')
-        elif tag.name == 'span':
-            print_and_continue(tag, 'span', spacing + ' span')
-    return
-
-
-def print_and_continue(tag, element, spacing):
+def parse_tag(tag, spacing='', parsed_tags=[]):
     for content in tag.contents:
-        if type(content) is bs4.element.NavigableString:
-            if unicode(content) != '\n':
-                print(spacing + ' ' +
-                      unicode(content).replace('\n', ' '))
-        elif type(tag) is bs4.element.Tag:
-            going(content, spacing)
+        if type(content) is bs4.element.Tag:
+            parse_tag(content, spacing + ' ' + content.name, parsed_tags)
+        elif type(content) is bs4.element.NavigableString and not str(content).isspace():
+            parsed_tag = spacing + ' ' + str(content).replace('\n', ' ')
+            parsed_tags.append(parsed_tag)
+            print(parsed_tag)
+    return parsed_tags

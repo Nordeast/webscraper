@@ -21,7 +21,9 @@ url = 'https://www.ibm.com/support/knowledgecenter/SSEPEK_12.0.0/codes/src/tpc/n
 program_start_time = datetime.now()
 
 soup = soup_engine.soup_from_url(url)
-soup_engine.parse(soup)
+parsed_tags = soup_engine.parse_tag(soup.find('section', class_="msgExplanation"))
+print('parsed tags')
+print(parsed_tags)
 
 # print how long the program took to run
 # program_duration = datetime.now() - program_start_time
