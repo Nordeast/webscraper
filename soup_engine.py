@@ -1,5 +1,5 @@
 import time
-import urllib2
+import requests
 import bs4
 from bs4 import BeautifulSoup
 
@@ -13,9 +13,9 @@ def soup_from_url(url):
     # Could maybe remove it.
     time.sleep(1)
     # Get page from url
-    page = urllib2.urlopen(url)
+    response = requests.get(url)
     # parse the html using beautiful soup and store in variable `soup`
-    soup = BeautifulSoup(page, 'html.parser')
+    soup = BeautifulSoup(response.content, 'html.parser')
     return soup
 
 
