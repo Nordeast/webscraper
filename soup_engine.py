@@ -2,7 +2,7 @@ import time
 import requests
 import bs4
 from bs4 import BeautifulSoup
-
+import constants
 
 def soup_from_url(url):
     """This method takes a browser instance and a url. It then navigates to the page, pulls the html from it
@@ -20,104 +20,38 @@ def soup_from_url(url):
 
 
 def dict_from_soup(soup):
-    """This method takes a soup (A parsed html page into a python object) and extracts the reason code
+    """This method takes a soup (A parsed html page into a python object) and extracts the information
     information from the page and returns it in a dictionary
     """
     # Get the info we want from the page and store it in the struct
     # Check if we find the span tag on the page because not all pages have a span tags
-    span_tag = soup.find(
-        'span', class_="msgNumber")
-    code_number = ""
-    if span_tag:
-        code_number = span_tag.get_text()
 
-    span_tag = soup.find(
-        'span', class_="msgText")
-    msg_text = ""
-    if span_tag:
-        msg_text = span_tag.get_text()
+    parsed_dict = {}
+    for dictionary in constants.PARSE_DICT:
+        tag = soup.find(dictionary[constants.DICT_TAG], class_=dictionary[constants.DICT_CLASS])
+        if tag:
+            parsed_dict[dictionary[constants.DICT_KEY]] = parse_tag(tag)
+        else:
+            parsed_dict[dictionary[constants.DICT_KEY]] = []
 
-    span_tag = soup.find(
-        'section', class_="msgExplanation")
-    explanation = ""
-    if span_tag:
-        explanation = span_tag.get_text()
-
-    span_tag = soup.find(
-        'section', class_="msgSystemAction")
-    system_action = ""
-    if span_tag:
-        system_action = span_tag.get_text()
-
-    span_tag = soup.find(
-        'section', class_="msgOperatorResponse")
-    operator_response = ""
-    if span_tag:
-        operator_response = span_tag.get_text()
-
-    span_tag = soup.find(
-        'section', class_="msgSystemProgrammerResponse")
-    system_programmer_response = ""
-    if span_tag:
-        system_programmer_response = span_tag.get_text()
-
-    span_tag = soup.find(
-        'section', class_="msgProblemDetermination")
-    problem_determination = ""
-    if span_tag:
-        problem_determination = span_tag.get_text()
-
-    span_tag = soup.find(
-        'section', class_="msgUserResponse")
-    user_response = ""
-    if span_tag:
-        user_response = span_tag.get_text()
-
-    span_tag = soup.find(
-        'section', class_="msgOther")
-    sql_state = ""
-    if span_tag:
-        sql_state = span_tag.get_text()
-
-    # Strip out newlines and unicode characters
-    code_number = code_number.replace(
-        "\\n", " ").encode('ascii', 'ignore')
-    explanation = explanation.replace(
-        "\\n", " ").encode('ascii', 'ignore')
-    system_action = system_action.replace(
-        "\\n", " ").encode('ascii', 'ignore')
-    operator_response = operator_response.replace(
-        "\\n", " ").encode('ascii', 'ignore')
-    system_programmer_response = system_programmer_response.replace(
-        "\\n", " ").encode('ascii', 'ignore')
-    user_response = user_response.replace(
-        "\\n", " ").encode('ascii', 'ignore')
-    problem_determination = problem_determination.replace(
-        "\\n", " ").encode('ascii', 'ignore')
-    sql_state = sql_state.replace(
-        "\\n", " ").encode('ascii', 'ignore')
-
-    # Create dictionary and save to reason_code_dictionaries array
-    reason_code_dict = {
-        'code_number': code_number,
-        'msg_text': msg_text,
-        'explanation': explanation,
-        'system_action': system_action,
-        'operator_response': operator_response,
-        'system_programmer_response': system_programmer_response,
-        'user_response': user_response,
-        'problem_determination': problem_determination,
-        'sql_state': sql_state
-    }
-
-    return reason_code_dict
+    return parsed_dict
 
 def parse_tag(tag, spacing='', parsed_tags=[]):
     for content in tag.contents:
         if type(content) is bs4.element.Tag:
-            parse_tag(content, spacing + ' ' + content.name, parsed_tags)
+            if spacing:
+                parse_tag(content, spacing + ' > ' + content.name, parsed_tags)
+            else:
+                parse_tag(content, content.name, parsed_tags)
         elif type(content) is bs4.element.NavigableString and not str(content).isspace():
-            parsed_tag = spacing + ' ' + str(content).replace('\n', ' ')
+            parsed_tag = spacing + ': ' + str(content).replace('\n', ' ')
             parsed_tags.append(parsed_tag)
-            print(parsed_tag)
+            # print(parsed_tag)
     return parsed_tags
+
+def print_soup_engine_dict(dictionary):
+    for parse_dict in constants.PARSE_DICT:
+        array_to_print = dictionary[parse_dict[constants.DICT_KEY]]
+        print(parse_dict[constants.DICT_KEY])
+        for string in array_to_print:
+            print('    ' + string)
