@@ -1,0 +1,107 @@
+<!DOCTYPE html>\n<html lang="en-us" xml:lang="en-us">\n
+
+<head>
+    <meta content="text/html; charset=unicode-escape" http-equiv="Content-Type" />\n
+    <meta charset="unicode-escape" />\n
+    <meta content="\xa9 Copyright IBM Corporation 2005" name="dcterms.rights" />\n
+    <meta content="THE USE OF LONG VARCHAR OR LONG VARGRAPHIC IS NOT ALLOWED IN THIS CONTEXT" name="description" />\n
+    <meta content="ZZ" name="geo.country" />\n<script>
+        \
+        n digitalData = {
+            \
+            n page: {
+                \
+                n pageInfo: {
+                    \
+                    n language: "en-us",
+                    \n\ n version: "v18",
+                    \n ibm: {
+                        \
+                        n country: "ZZ",
+                        \n type: "CT701"\
+                        n\ n
+                    }\
+                    n
+                }\
+                n
+            }\
+            n
+        };\
+        n
+    </script><!-- Licensed Materials - Property of IBM -->\n
+    <!-- US Government Users Restricted Rights -->\n
+    <!-- Use, duplication or disclosure restricted by -->\n
+    <!-- GSA ADP Schedule Contract with IBM Corp. -->\n
+    <link href="KC_ROOT/css/ddita/ibmdita.css" rel="stylesheet" type="text/css" />\n
+    <link href="../../src/tpc/db2z_n.html" rel="Start" />\n<title>Db2 12 - Codes - SQLCODE -097</title>\n<script
+        type="text/javascript">
+        \
+        nwindow.digitalData = {
+            page: {
+                pageInfo: {
+                    ibm: {
+                        config: {
+                            coremodules: {
+                                enabled: false
+                            },
+                            survey: {
+                                global_percent: 0
+                            }
+                        }
+                    }
+                }
+            }
+        };\
+        nwindow.kcTranslations = {
+            'content.copy': 'Copy'
+        };\
+        n
+    </script>\n
+    <link href="//1.www.s81c.com/common/v18/r128/css/www.css" rel="stylesheet" type="text/css">\n
+    <link href="//1.www.s81c.com/common/v18/r128/css/tables.css" rel="stylesheet" type="text/css">\n
+    <link href="/support/knowledgecenter/js/resources/internal/kc/content_northstar_styles.css" rel="stylesheet"
+        type="text/css" />\n<script charset="utf-8" src="//1.www.s81c.com/common/v18/r128/js/www.js"
+        type="text/javascript"></script>\n<script charset="utf-8" src="//1.www.s81c.com/common/v18/r128/js/tables.js"
+        type="text/javascript"></script>\n<script charset="utf-8" src="//1.www.s81c.com/common/v18/r128/js/dyntabs.js"
+        type="text/javascript"></script>\n<script charset="utf-8"
+        src="/support/knowledgecenter/js/content_northstar_main.build.js" type="text/javascript"></script>\n</link>
+    </link>
+</head>\n
+
+<body id="n097">
+    <main role="main">
+        <article aria-labelledby="d785164e3" role="article">
+            <h1 class="msghead" id="d785164e3"><span class="title title msgId"><span
+                        class="ph ph msgNumber">-097</span></span>\xa0\xa0\xa0<span
+                    class="shortdesc shortdesc msgText">THE USE OF LONG VARCHAR OR LONG VARGRAPHIC IS NOT ALLOWED\nIN
+                    THIS CONTEXT</span></h1>
+            <div class="body refbody msgBody">
+                <h4 id="msgd785164e52">Explanation</h4>
+                <section aria-label="-097: Explanation" class="msgExplanation" role="region">
+                    <div class="p">The statement attempted to use the LONG VARCHAR\nor LONG VARGRAPHIC syntax. This
+                        syntax cannot be used for the following\nstatements: <ul>
+                            <li>CAST specification syntax</li>\n<li>CREATE DISTINCT TYPE</li>\n<li>CREATE FUNCTION</li>
+                            \n<li>CREATE PROCEDURE</li>\n<li>ALTER FUNCTION </li>\n<li>COMMENT ON FUNCTION </li>\n<li>
+                                GRANT EXECUTE ON FUNCTION</li>\n<li>REVOKE EXECUTE ON FUNCTION</li>\n<li>DROP</li>\n
+                        </ul>\n</div>\n<p>Use the VARCHAR or VARGRAPHIC syntax specifying an explicit\nlength as
+                        required.</p>\n
+                </section>\n<h4 id="msgd785164e79">System action</h4>
+                <section aria-label="-097: System action" class="msgSystemAction" role="region">
+                    <p><span class="ph">The statement cannot be processed.</span></p>\n
+                </section>\n<h4 id="msgd785164e85">Programmer response</h4>
+                <section aria-label="-097: Programmer response" class="msgProgrammerResponse" role="region">
+                    <p> Correct the statement.</p>\n
+                </section>\n<section aria-labelledby="d785164e91" class="section section msgOther" role="region">
+                    <h4 id="d785164e91"><span class="ph">SQLSTATE</span></h4>
+                    <p>42601</p>\n
+                </section>
+            </div>\n<aside aria-labelledby="d785164e3" role="complementary">\n<div class="familylinks">\n<div
+                        class="parentlink"><strong>Parent topic:</strong> <a data-hd-operatingsystem="zOS"
+                            data-hd-product="SSEPEK_12.0.0" href="../../src/tpc/db2z_n.html"
+                            title="SQL return codes that are preceded by a minus sign (-) indicate that the SQL statement execution was unsuccessful.">SQL
+                            error codes</a></div>\n</div>\n</aside>
+        </article>
+    </main>
+</body>
+
+</html>
