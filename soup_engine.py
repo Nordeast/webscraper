@@ -1,9 +1,11 @@
 import time
+from datetime import datetime
 import requests
 import bs4
 from bs4 import BeautifulSoup
 import constants
 import collections
+import os
 
 
 def soup_from_url(url):
@@ -90,3 +92,28 @@ def print_soup_engine_dict(dictionary):
     print('    ' + dictionary[constants.DICT_URL])
     print('')
     print('<<<<<<<<<<>>>>>>>>>>')
+
+
+def write_soup_engine_dict_to_file(dictionaries, file_name):
+    """
+    Formats and writes the dictionary out to a text file with the specified name
+    and timestamp.
+    """
+    # Create file name and path
+    file_name = file_name + '_' + \
+        datetime.now().replace(microsecond=0).isoformat() + ".txt"
+    file_path = os.path.join('./Output_Files', file_name)
+    # Open file for writing
+    with open(file_path, 'a') as txt_file:
+        # Begin looping and writing to the file
+        for dictionary in dictionaries:
+            txt_file.write('**start section**\n')
+            for parse_dict in constants.PARSE_DICT:
+                value = dictionary[parse_dict[constants.DICT_KEY]]
+                txt_file.write(parse_dict[constants.DICT_KEY] + '\n')
+                for string in value:
+                    txt_file.write('    ' + string + '\n')
+
+            txt_file.write(constants.DICT_URL + '\n')
+            txt_file.write('    ' + dictionary[constants.DICT_URL] + '\n')
+            txt_file.write('**end section**\n')
