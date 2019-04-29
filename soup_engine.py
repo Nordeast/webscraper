@@ -100,9 +100,9 @@ def write_soup_engine_dict_to_file(dictionaries, file_name):
     and timestamp.
     """
     # Create file name and path
-    file_name = file_name + '_' + \
-        datetime.now().replace(microsecond=0).isoformat() + ".txt"
-    file_path = os.path.join('./Output_Files', file_name)
+    file_name = file_name + '_' + str(time.clock()) + ".txt"
+    folder_path = os.path.join(os.getcwd(), 'Output_Files')
+    file_path = os.path.join(folder_path, file_name)
     # Open file for writing
     with open(file_path, 'a') as txt_file:
         # Begin looping and writing to the file

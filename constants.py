@@ -47,6 +47,11 @@ PARSE_DICT = [
     },
     {
         DICT_TAG: 'section',
+        DICT_CLASS: 'msgProgrammerResponse',
+        DICT_KEY: 'programmer_response'
+    },
+    {
+        DICT_TAG: 'section',
         DICT_CLASS: 'msgOther',
         DICT_KEY: 'sql_state'
     },
