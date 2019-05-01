@@ -12,7 +12,11 @@ import constants
 
 ############ CONSTANTS ############
 
-url = 'https://www.ibm.com/support/knowledgecenter/SSEPEK_12.0.0/codes/src/tpc/n097.html?view=embed'
+url = 'https://www.ibm.com/support/knowledgecenter/SSEPEK_12.0.0/codes/src/tpc/n159.html'
+
+add_embed = True
+if add_embed:
+    url = url + '?view=embed'
 
 ############ END CONSTANTS ############
 
@@ -20,8 +24,6 @@ url = 'https://www.ibm.com/support/knowledgecenter/SSEPEK_12.0.0/codes/src/tpc/n
 
 soup = soup_engine.soup_from_url(url)
 parsed_tags = soup_engine.dict_from_soup(soup)
-parsed_tags[constants.DICT_URL] = ': ' + url
-soup_engine.print_soup_engine_dict(parsed_tags)
+parsed_tags[constants.DICT_URL] = url
 dictionaries = [parsed_tags]
-
 soup_engine.write_soup_engine_dict_to_file(dictionaries, 'codes')
