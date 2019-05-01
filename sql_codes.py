@@ -43,7 +43,7 @@ for span in main_page_link_spans:
     soup = soup_engine.soup_from_url(url + url_view_embed)
     # Parse code page
     parsed_tags = soup_engine.dict_from_soup(soup)
-    parsed_tags[constants.DICT_URL] = ': ' + url
+    parsed_tags[constants.DICT_URL] = url
     # Append to array
     sql_code_dictionaries.append(parsed_tags)
 
