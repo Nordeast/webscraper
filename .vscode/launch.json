@@ -5,10 +5,31 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "parse_and_print.py",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "${workspaceFolder}/parse_and_print.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "working.py",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/working.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "reason_codes.py",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/reason_codes.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "sql_codes.py",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/sql_codes.py",
             "console": "integratedTerminal"
         }
     ]
