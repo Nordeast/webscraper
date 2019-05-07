@@ -72,6 +72,6 @@ for url in reason_code_urls:
 # Write to file
 file_name = 'reason_codes'
 print('Writing parsed codes to file with name ' + file_name)
-soup_engine.write_soup_engine_dict_to_file(reason_code_dictionaries, file_name)
+soup_engine.write_soup_engine_dict_to_files(reason_code_dictionaries, file_name)
 
 profile.end()

@@ -26,4 +26,4 @@ soup = soup_engine.soup_from_url(url)
 parsed_tags = soup_engine.dict_from_soup(soup)
 parsed_tags[constants.DICT_URL] = url
 dictionaries = [parsed_tags]
-soup_engine.write_soup_engine_dict_to_file(dictionaries, 'codes')
+soup_engine.write_soup_engine_dict_to_files(dictionaries, 'codes')

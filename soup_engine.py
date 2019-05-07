@@ -7,6 +7,7 @@ import constants
 import collections
 import os
 import json
+import math
 
 def soup_from_url(url):
     """This method takes a browser instance and a url. It then navigates to the page, pulls the html from it
@@ -135,15 +136,25 @@ def str_is_empty(string):
 def str_is_not_empty(string):
     return not str_is_empty(string)
 
-def write_soup_engine_dict_to_file(dictionaries, file_name):
+def write_soup_engine_dict_to_files(dictionaries, file_name):
     """
     Formats and writes the dictionary out to a text file with the specified name
     and timestamp.
     """
-    # Create file name and path
-    file_name = file_name + '_' + str(calendar.timegm(time.gmtime())) + ".json"
+
     folder_path = os.path.join(os.getcwd(), 'Output_Files')
-    file_path = os.path.join(folder_path, file_name)
-    # Open file for writing
-    with open(file_path, 'a') as json_file:
-        json.dump(dictionaries, json_file, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=4)
+    timestamp = str(calendar.timegm(time.gmtime()))
+
+    index = 1
+    for chunked_list in list(chunks(dictionaries, 100)):
+        unique_file_name = file_name + '_' + str(index) + "_" + timestamp + ".json"
+        file_path = os.path.join(folder_path, unique_file_name)
+        # Open file for writing
+        with open(file_path, 'a') as json_file:
+            json.dump(chunked_list, json_file, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=1)
+        index += 1
+
+def chunks(list, chunk_size):
+    """Yield successive chunk_size'd chunks from list."""
+    for i in range(0, len(list), chunk_size):
+        yield list[i:i + chunk_size]

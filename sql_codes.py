@@ -55,7 +55,7 @@ for span in main_page_link_spans:
 # Write to file
 file_name = 'sql_codes'
 print('Writing parsed codes to file with name ' + file_name)
-soup_engine.write_soup_engine_dict_to_file(sql_code_dictionaries, file_name)
+soup_engine.write_soup_engine_dict_to_files(sql_code_dictionaries, file_name)
 
 #### END SCRAPE ####
 
