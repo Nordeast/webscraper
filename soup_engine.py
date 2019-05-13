@@ -215,8 +215,13 @@ def format_dict_to_string(string, indent, array):
         if dictionary['type'] in 'bullet' or dictionary['type'] in 'description':
             prefix = '- '
             wrapper.subsequent_indent = indent + '  '
-        content = prefix + dictionary['content'] + '\n'
-        string += wrapper.fill(content)
+
+        if dictionary['type'] in 'list' and str_is_empty(dictionary['content']):
+            string = string[:-1]
+        else:
+            content = prefix + dictionary['content'] + '\n'
+            string += wrapper.fill(content)
+
         if 'children' in dictionary:
             string += format_dict_to_string('\n',
                                             indent + '  ', dictionary['children'])
