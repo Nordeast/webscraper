@@ -68,4 +68,10 @@ PARSE_DICT = [
         DICT_DESC: 'SQL State',
         DICT_KEY: 'sql_state'
     },
+    {
+        DICT_TAG: 'section',
+        DICT_CLASS: 'msgRoutingCode',
+        DICT_DESC: 'Routing Code',
+        DICT_KEY: 'routing_code'
+    }
 ]
