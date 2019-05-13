@@ -122,7 +122,7 @@ def clean_string(string):
 def convert_tag_name(string):
     if string == 'div':
         return 'section'
-    elif string == 'ul' or string == 'dl':
+    elif string == 'ul' or string == 'dl' or string == 'ol':
         return 'list'
     elif string == 'li':
         return 'bullet'
