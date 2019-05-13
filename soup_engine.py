@@ -57,7 +57,7 @@ def dict_from_soup(soup):
 
 
 def parse_tag(tag, parent=None, parsed_tags=[]):
-    """ 
+    """
     Recurses down a tags tree and parses out the information.
     It represents the tree in a dictionary
     """
@@ -109,7 +109,7 @@ def parse_tag(tag, parent=None, parsed_tags=[]):
 
 
 def clean_string(string):
-    """ 
+    """
     Add to this method to clean the strings coming from the HTML.
     """
 
