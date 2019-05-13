@@ -212,6 +212,9 @@ def format_dict_to_string(string, indent, array):
 
     for dictionary in array:
         prefix = ''
+        if dictionary['type'] == None:
+            continue
+
         if dictionary['type'] in 'bullet' or dictionary['type'] in 'description':
             prefix = '- '
             wrapper.subsequent_indent = indent + '  '
