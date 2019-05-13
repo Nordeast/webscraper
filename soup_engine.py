@@ -159,40 +159,48 @@ def write_soup_engine_dict_to_files(dictionaries, file_name):
 
     index = 1
     for chunked_list in list(chunks(dictionaries, 100)):
+
+        # Open file for writing
+        output_string = ''
+        for dictionary in chunked_list:
+            code = dictionary['number'][0]['content']
+            output_string += '*code*' + code + '*end_code*'  # Parsing tags
+            output_string += '\n*content*\n'  # Parsing tags
+
+            # Write out Code
+            output_string += 'Code\n'
+            code_string = dictionary['number'][0]['content'] + \
+                ' ' + dictionary['msg_text'][0]['content']
+            output_string += wrapper.fill(code_string)
+            output_string += '\n\n'
+
+            # Write out sections
+            for key in constants.PARSE_DICT[2:]:
+                string = format_dict_to_string(
+                    '', '  ', dictionary[key[constants.DICT_KEY]])
+                string_len = len(string)
+                if string_len > 0:
+                    output_string += key[constants.DICT_DESC] + '\n'
+                    output_string += string
+                    output_string += '\n\n'
+
+            # Write out url
+            output_string += 'URL\n'
+            output_string += wrapper.fill(dictionary['url'])
+
+        output_string += '\n*end_content*\n'  # Parsing tags
+
+        # Remove extra new lines
+        output_string.replace('\n\n\n', '\n')
+
+        # Create file name
         unique_file_name = file_name + '_' + \
             str(index) + "_" + timestamp + ".txt"
         file_path = os.path.join(folder_path, unique_file_name)
-        # Open file for writing
+        # Write string to file
         with open(file_path, 'a') as txt_file:
-            for dictionary in chunked_list:
-                code = dictionary['number'][0]['content']
-                txt_file.write('*code*' + code + '*end_code*')  # Parsing tags
-                txt_file.write('\n*content*\n')  # Parsing tags
+            txt_file.write(output_string)
 
-                # Write out Code
-                txt_file.write('Code\n')
-                code_string = dictionary['number'][0]['content'] + \
-                    ' ' + dictionary['msg_text'][0]['content']
-                txt_file.write(wrapper.fill(code_string))
-                txt_file.write('\n\n')
-
-                # Write out sections
-                for key in constants.PARSE_DICT[2:]:
-                    string = format_dict_to_string(
-                        '', '  ', dictionary[key[constants.DICT_KEY]])
-                    if len(string) > 0:
-                        txt_file.write(key[constants.DICT_DESC] + '\n')
-                        txt_file.write(string)
-                        if string[:-2] not in '\n':
-                            txt_file.write('\n\n')
-                        else:
-                            txt_file.write('\n')
-
-                # Write out url
-                txt_file.write('URL\n')
-                txt_file.write(wrapper.fill(dictionary['url']))
-
-            txt_file.write('\n*end_content*\n')  # Parsing tags
         index += 1
 
 
