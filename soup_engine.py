@@ -164,8 +164,8 @@ def write_soup_engine_dict_to_files(dictionaries, file_name):
         output_string = ''
         for dictionary in chunked_list:
             code = dictionary['number'][0]['content']
-            output_string += '*code*' + code + '*end_code*'  # Parsing tags
-            output_string += '\n*content*\n'  # Parsing tags
+            output_string += '<code> ' + code + ' <end code>'  # Parsing tags
+            output_string += '\n<content>\n'  # Parsing tags
 
             # Write out Code
             output_string += 'Code\n'
@@ -187,8 +187,9 @@ def write_soup_engine_dict_to_files(dictionaries, file_name):
             # Write out url
             output_string += 'URL\n'
             output_string += wrapper.fill(dictionary['url'])
+            output_string += '\n'
 
-        output_string += '\n*end_content*\n'  # Parsing tags
+        output_string += '\n<end content>\n'  # Parsing tags
 
         # Remove extra new lines
         output_string.replace('\n\n\n', '\n')
