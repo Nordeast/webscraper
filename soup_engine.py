@@ -8,6 +8,7 @@ import collections
 import os
 import json
 import math
+import textwrap
 
 def soup_from_url(url):
     """This method takes a browser instance and a url. It then navigates to the page, pulls the html from it
@@ -97,7 +98,7 @@ def parse_tag(tag, parent=None, parsed_tags=[]):
                 'type': convert_tag_name(content.name),
                 'content': '',
                 'children': []
-            }
+            }                
             parsed_tags.append(dictionary)
             parse_tag(content, dictionary, dictionary['children'])
 
@@ -137,6 +138,66 @@ def str_is_not_empty(string):
     return not str_is_empty(string)
 
 def write_soup_engine_dict_to_files(dictionaries, file_name):
+    """
+    Formats and writes the dictionary out to a text file with the specified name
+    and timestamp.
+    """
+    folder_path = os.path.join(os.getcwd(), 'Output_Files')
+    timestamp = str(calendar.timegm(time.gmtime()))
+
+    wrapper = textwrap.TextWrapper()
+    wrapper.width = constants.MAX_LINE_WIDTH
+    wrapper.initial_indent = '  '
+    wrapper.subsequent_indent = '  '
+
+    index = 1
+    for chunked_list in list(chunks(dictionaries, 100)):
+        unique_file_name = file_name + '_' + str(index) + "_" + timestamp + ".txt"
+        file_path = os.path.join(folder_path, unique_file_name)
+        # Open file for writing
+        with open(file_path, 'a') as txt_file:
+            for dictionary in chunked_list:
+                # Write out Code
+                txt_file.write('Code\n')
+                code = dictionary['number'][0]['content'] + ' ' + dictionary['msg_text'][0]['content']
+                txt_file.write(wrapper.fill(code))
+                txt_file.write('\n\n')
+                
+                # Write out sections
+                for key in constants.PARSE_DICT[2:]:
+                    string = format_dict_to_string(wrapper, '', '  ', dictionary[key[constants.DICT_KEY]])
+                    if len(string) > 0:
+                        txt_file.write(key[constants.DICT_DESC] + '\n')
+                        txt_file.write(string)
+                        txt_file.write('\n\n')
+
+
+                # Write out url
+                txt_file.write('\n\nURL\n')
+                txt_file.write(textwrap.fill(dictionary['url'], constants.MAX_LINE_WIDTH))
+
+            txt_file.write('')
+        index += 1
+
+
+def format_dict_to_string(wrapper, string, indent, array):
+    wrapper.initial_indent = indent
+    wrapper.subsequent_indent = indent
+
+    for dictionary in array:
+        prefix = ''
+        if dictionary['type'] in 'bullet' or dictionary['type'] in 'description':
+            prefix = '- '
+            #wrapper.subsequent_indent = indent + '  '
+        content = prefix + dictionary['content'] + '\n'
+        string += wrapper.fill(content)
+        if 'children' in dictionary:
+            string += format_dict_to_string(wrapper, '\n', indent + '  ', dictionary['children'])
+
+    return string
+
+
+def write_soup_engine_dict_to_json_files(dictionaries, file_name):
     """
     Formats and writes the dictionary out to a text file with the specified name
     and timestamp.

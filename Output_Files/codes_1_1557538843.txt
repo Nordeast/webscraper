@@ -1,0 +1,59 @@
+Code
+  -159 THE STATEMENT REFERENCES object-name WHICH IDENTIFIES AN actual-type
+  RATHER THAN AN expected-type
+
+Explanation
+  An object was specified as part of a statement, but the actual type of the
+  object is not the expected type. For example, if the statement is DROP ALIAS
+  TED.T1, then TED.T1 must be an alias name.
+    object-name
+      - The name of the object.
+      actual-type
+      - The current type of the object.
+      expected-type
+      - The expected type of the object.
+      If actual-type or expected-type is TABLE, and actual-type or expected-type
+      is a particular type of table, then the type of table was not valid for
+      the statement that was specified.
+
+System Action
+  The statement cannot be processed.
+
+Programmer Response
+  Change the statement to match the type of object that is identified by the
+  expected-type value. For example:
+    - An ALTER VIEW statement must reference an existing view.
+      - A COMMENT ON ALIAS statement must specify the name of an alias, and not
+      the name of a table or view.
+      - A COMMENT ON TABLE statement must reference an existing table or view.
+      - A CREATE INDEX statement with the UNIQUE keyword must specify a table
+      that is not a materialized query table.
+      - A CREATE INDEX statement must specify the name of a table that is not a
+      clone table.
+      - A CREATE TRIGGER statement must specify a table in the ON clause that is
+      not a materialized query table. That is, a trigger cannot be defined for a
+      materialized query table.
+      - A CREATE TRIGGER statement must specify the name of a table that is not
+      a clone table.
+      - A DROP ALIAS statement must specify the name of an alias, and not the
+      name of a table or view.
+      - A DROP TABLE statement must reference an existing table. If an alias is
+      specified, then the table that the alias refers to is dropped. Use the
+      DROP ALIAS statement to drop the alias.
+      - A DROP VIEW statement must reference an existing view.
+      - A REFRESH TABLE statement must refer to a materialized query table.
+      - A CREATE MASK or CREATE PERMISSION statement must name a base table that
+      exists on the server. The table must not be a system-period temporal
+      table, a history table, or an accelerator-only table.
+      - The table-locator-reference must reference a table name in the LIKE
+      clause.
+
+
+SQL State
+  SQLSTATE  42809
+
+
+
+URL
+https://www.ibm.com/support/knowledgecenter/SSEPEK_12.0.0/codes/src/tpc/n159.htm
+l?view=embed
