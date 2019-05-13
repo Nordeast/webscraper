@@ -10,6 +10,7 @@ import json
 import math
 import textwrap
 
+
 def soup_from_url(url):
     """This method takes a browser instance and a url. It then navigates to the page, pulls the html from it
     and parses it in to a BeautifulSoup object we can use in python to get the information from it.
@@ -46,8 +47,9 @@ def dict_from_soup(soup):
                         'children': []
                     }
                 ]
-            else:    
-                parsed_dict[dictionary[constants.DICT_KEY]] = parse_tag(tag, None, [])
+            else:
+                parsed_dict[dictionary[constants.DICT_KEY]
+                            ] = parse_tag(tag, None, [])
         else:
             parsed_dict[dictionary[constants.DICT_KEY]] = []
 
@@ -64,7 +66,8 @@ def parse_tag(tag, parent=None, parsed_tags=[]):
         # Check if it is a html tag
         is_tag = type(content) is bs4.element.Tag
         # Check if it is a string
-        is_string = type(content) is bs4.element.NavigableString and str_is_not_empty(str(content))
+        is_string = type(
+            content) is bs4.element.NavigableString and str_is_not_empty(str(content))
 
         # Check if it a html tag that is a wrapper for a string
         is_text_tag = False
@@ -91,14 +94,14 @@ def parse_tag(tag, parent=None, parsed_tags=[]):
                     'type': 'string',
                     'content': string
                 })
-        elif is_tag:            
+        elif is_tag:
             # If the content is a tag we need to recurse down
             # and continue parsing its children
             dictionary = {
                 'type': convert_tag_name(content.name),
                 'content': '',
                 'children': []
-            }                
+            }
             parsed_tags.append(dictionary)
             parse_tag(content, dictionary, dictionary['children'])
 
@@ -114,6 +117,7 @@ def clean_string(string):
     string = string.replace('  ', ' ')
     string = string.encode('ascii', 'ignore').decode()
     return string
+
 
 def convert_tag_name(string):
     if string == 'div':
@@ -131,11 +135,14 @@ def convert_tag_name(string):
     elif string == 'h4':
         return 'header'
 
+
 def str_is_empty(string):
     return not string or string.isspace()
-    
+
+
 def str_is_not_empty(string):
     return not str_is_empty(string)
+
 
 def write_soup_engine_dict_to_files(dictionaries, file_name):
     """
@@ -152,35 +159,46 @@ def write_soup_engine_dict_to_files(dictionaries, file_name):
 
     index = 1
     for chunked_list in list(chunks(dictionaries, 100)):
-        unique_file_name = file_name + '_' + str(index) + "_" + timestamp + ".txt"
+        unique_file_name = file_name + '_' + \
+            str(index) + "_" + timestamp + ".txt"
         file_path = os.path.join(folder_path, unique_file_name)
         # Open file for writing
         with open(file_path, 'a') as txt_file:
             for dictionary in chunked_list:
+                code = dictionary['number'][0]['content']
+                txt_file.write('*code*' + code + '*end_code*')  # Parsing tags
+                txt_file.write('\n*content*\n')  # Parsing tags
+
                 # Write out Code
                 txt_file.write('Code\n')
-                code = dictionary['number'][0]['content'] + ' ' + dictionary['msg_text'][0]['content']
-                txt_file.write(wrapper.fill(code))
+                code_string = dictionary['number'][0]['content'] + \
+                    ' ' + dictionary['msg_text'][0]['content']
+                txt_file.write(wrapper.fill(code_string))
                 txt_file.write('\n\n')
-                
+
                 # Write out sections
                 for key in constants.PARSE_DICT[2:]:
-                    string = format_dict_to_string(wrapper, '', '  ', dictionary[key[constants.DICT_KEY]])
+                    string = format_dict_to_string(
+                        '', '  ', dictionary[key[constants.DICT_KEY]])
                     if len(string) > 0:
                         txt_file.write(key[constants.DICT_DESC] + '\n')
                         txt_file.write(string)
-                        txt_file.write('\n\n')
-
+                        if string[:-2] not in '\n':
+                            txt_file.write('\n\n')
+                        else:
+                            txt_file.write('\n')
 
                 # Write out url
-                txt_file.write('\n\nURL\n')
-                txt_file.write(textwrap.fill(dictionary['url'], constants.MAX_LINE_WIDTH))
+                txt_file.write('URL\n')
+                txt_file.write(wrapper.fill(dictionary['url']))
 
-            txt_file.write('')
+            txt_file.write('\n*end_content*\n')  # Parsing tags
         index += 1
 
 
-def format_dict_to_string(wrapper, string, indent, array):
+def format_dict_to_string(string, indent, array):
+    wrapper = textwrap.TextWrapper()
+    wrapper.width = constants.MAX_LINE_WIDTH
     wrapper.initial_indent = indent
     wrapper.subsequent_indent = indent
 
@@ -188,11 +206,12 @@ def format_dict_to_string(wrapper, string, indent, array):
         prefix = ''
         if dictionary['type'] in 'bullet' or dictionary['type'] in 'description':
             prefix = '- '
-            #wrapper.subsequent_indent = indent + '  '
+            wrapper.subsequent_indent = indent + '  '
         content = prefix + dictionary['content'] + '\n'
         string += wrapper.fill(content)
         if 'children' in dictionary:
-            string += format_dict_to_string(wrapper, '\n', indent + '  ', dictionary['children'])
+            string += format_dict_to_string('\n',
+                                            indent + '  ', dictionary['children'])
 
     return string
 
@@ -208,12 +227,15 @@ def write_soup_engine_dict_to_json_files(dictionaries, file_name):
 
     index = 1
     for chunked_list in list(chunks(dictionaries, 100)):
-        unique_file_name = file_name + '_' + str(index) + "_" + timestamp + ".json"
+        unique_file_name = file_name + '_' + \
+            str(index) + "_" + timestamp + ".json"
         file_path = os.path.join(folder_path, unique_file_name)
         # Open file for writing
         with open(file_path, 'a') as json_file:
-            json.dump(chunked_list, json_file, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=1)
+            json.dump(chunked_list, json_file, skipkeys=False, ensure_ascii=True,
+                      check_circular=True, allow_nan=True, cls=None, indent=1)
         index += 1
+
 
 def chunks(list, chunk_size):
     """Yield successive chunk_size'd chunks from list."""
