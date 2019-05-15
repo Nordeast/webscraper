@@ -1,4 +1,4 @@
-MAX_LINE_WIDTH = 80
+MAX_LINE_WIDTH = 72
 
 # Dictionary Constants
 DICT_TAG = 'tag'
