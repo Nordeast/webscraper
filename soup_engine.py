@@ -134,6 +134,8 @@ def convert_tag_name(string):
         return 'string'
     elif string == 'h4':
         return 'header'
+    else:
+        return string
 
 
 def str_is_empty(string):
@@ -149,7 +151,7 @@ def write_soup_engine_dict_to_files(dictionaries, file_name):
     Formats and writes the dictionary out to a text file with the specified name
     and timestamp.
     """
-    folder_path = os.path.join(os.getcwd(), 'Output_Files')
+    folder_path = os.path.join(os.getcwd(), 'Output')
     timestamp = str(calendar.timegm(time.gmtime()))
 
     wrapper = textwrap.TextWrapper()
@@ -182,7 +184,7 @@ def write_soup_engine_dict_to_files(dictionaries, file_name):
                 if string_len > 0:
                     output_string += key[constants.DICT_DESC] + '\n'
                     output_string += string
-                    output_string += '\n\n'
+                    output_string += '\n'
 
             # Write out url
             output_string += 'URL\n'
@@ -192,7 +194,11 @@ def write_soup_engine_dict_to_files(dictionaries, file_name):
         output_string += '\n<end content>\n'  # Parsing tags
 
         # Remove extra new lines
-        output_string.replace('\n\n\n', '\n')
+        output_string = output_string.replace('\n\n\n\n\n\n\n', '\n\n')
+        output_string = output_string.replace('\n\n\n\n\n\n', '\n\n')
+        output_string = output_string.replace('\n\n\n\n\n', '\n\n')
+        output_string = output_string.replace('\n\n\n\n', '\n\n')
+        output_string = output_string.replace('\n\n\n', '\n\n')
 
         # Create file name
         unique_file_name = file_name + '_' + \
@@ -213,22 +219,30 @@ def format_dict_to_string(string, indent, array):
 
     for dictionary in array:
         prefix = ''
-        if dictionary['type'] == None:
+        if dictionary['type'] == None or dictionary['content'] == 'SQLSTATE':
             continue
 
-        if dictionary['type'] in 'bullet' or dictionary['type'] in 'description':
+        if dictionary['type'] == 'bullet' or dictionary['type'] == 'description':
             prefix = '- '
             wrapper.subsequent_indent = indent + '  '
 
-        if dictionary['type'] in 'list' and str_is_empty(dictionary['content']):
-            string = string[:-1]
-        else:
-            content = prefix + dictionary['content'] + '\n'
-            string += wrapper.fill(content)
+        if str_is_not_empty(dictionary['content']):
+            content = prefix + dictionary['content']
+            string += wrapper.fill(content) + '\n'
+
+        if dictionary['type'] == 'code':
+            string += '\n'
 
         if 'children' in dictionary:
-            string += format_dict_to_string('\n',
-                                            indent + '  ', dictionary['children'])
+            extra_indent = '  '
+            if dictionary['type'] != 'list' and str_is_empty(dictionary['content']):
+                extra_indent = ''
+
+            string += format_dict_to_string('',
+                                            indent + extra_indent, dictionary['children'])
+
+        if dictionary['type'] == 'list':
+            string += '\n'
 
     return string
 
@@ -239,7 +253,7 @@ def write_soup_engine_dict_to_json_files(dictionaries, file_name):
     and timestamp.
     """
 
-    folder_path = os.path.join(os.getcwd(), 'Output_Files')
+    folder_path = os.path.join(os.getcwd(), 'Output')
     timestamp = str(calendar.timegm(time.gmtime()))
 
     index = 1
