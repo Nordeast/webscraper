@@ -171,8 +171,11 @@ def write_soup_engine_dict_to_files(dictionaries, file_name):
 
             # Write out Code
             output_string += 'Code\n'
-            code_string = dictionary['number'][0]['content'] + \
-                ' ' + dictionary['msg_text'][0]['content']
+            code_string = dictionary['number'][0]['content']
+            
+            if len(dictionary['msg_text']) > 0:
+                code_string += ' ' + dictionary['msg_text'][0]['content']
+
             output_string += wrapper.fill(code_string)
             output_string += '\n\n'
 
@@ -191,7 +194,7 @@ def write_soup_engine_dict_to_files(dictionaries, file_name):
             output_string += wrapper.fill(dictionary['url'])
             output_string += '\n'
 
-        output_string += '\n<end content>\n'  # Parsing tags
+            output_string += '\n<end content>\n'  # Parsing tags
 
         # Remove extra new lines
         output_string = output_string.replace('\n\n\n\n\n\n\n', '\n\n')
