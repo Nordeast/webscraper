@@ -26,6 +26,13 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "dsn_codes.py",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/dsn_codes.py",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "sql_codes.py",
             "type": "python",
             "request": "launch",

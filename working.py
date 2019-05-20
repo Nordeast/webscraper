@@ -14,7 +14,7 @@ import constants
 # TODO URLS
 # https://www.ibm.com/support/knowledgecenter/SSEPEK_12.0.0/codes/src/tpc/n181.html
 
-url = 'https://www.ibm.com/support/knowledgecenter/SSEPEK_12.0.0/codes/src/tpc/n802.html'
+url = 'https://www.ibm.com/support/knowledgecenter/SSEPEK_12.0.0/msgs/src/tpc/db2z_msgshowtoread.html?view=embed'
 
 add_embed = True
 if add_embed:

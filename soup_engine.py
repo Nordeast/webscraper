@@ -165,6 +165,8 @@ def write_soup_engine_dict_to_files(dictionaries, file_name):
         # Open file for writing
         output_string = ''
         for dictionary in chunked_list:
+            if len(dictionary['number']) <= 0:
+                continue
             code = dictionary['number'][0]['content']
             output_string += '<code> ' + code + ' <end code>'  # Parsing tags
             output_string += '\n<content>\n'  # Parsing tags
@@ -178,6 +180,7 @@ def write_soup_engine_dict_to_files(dictionaries, file_name):
 
             output_string += wrapper.fill(code_string)
             output_string += '\n\n'
+
 
             # Write out sections
             for key in constants.PARSE_DICT[2:]:
