@@ -1,43 +1,50 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "parse_and_print.py",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/parse_and_print.py",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "working.py",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/working.py",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "reason_codes.py",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/reason_codes.py",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "dsn_codes.py",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/dsn_codes.py",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "sql_codes.py",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/sql_codes.py",
-            "console": "integratedTerminal"
-        }
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "parse_and_print.py",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/parse_and_print.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "working.py",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/working.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "reason_codes.py",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/reason_codes.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "dsn_codes.py",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/dsn_codes.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "sql_codes.py",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/sql_codes.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "system_messages.py",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/system_messages.py",
+      "console": "integratedTerminal"
+    }
+  ]
 }

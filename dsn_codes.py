@@ -33,7 +33,8 @@ for span in main_page_link_spans:
     group_url = a_tag['href'].replace("../../", "")
 
     # Load group page and get soup
-    child_page_soup = soup_engine.soup_from_url(url_base + group_url + url_view_embed)
+    child_page_soup = soup_engine.soup_from_url(
+        url_base + group_url + url_view_embed)
 
     # Get the links to the individual code pages
     child_page_link_spans = child_page_soup.find_all(
@@ -46,9 +47,9 @@ for span in main_page_link_spans:
         dsn_code_urls.append(url)
 
     progress_bar.print(index, total_length, 'Progress',
-                    '(' + str(index) + '/' + str(total_length) + ') URLs Scraped')
+                       '(' + str(index) + '/' + str(total_length) + ') URLs Scraped')
     index += 1
-        
+
 # Array to store the dsn code dictionaries once they have been scraped
 dsn_code_dictionaries = []
 index = 1
@@ -59,7 +60,7 @@ for url in dsn_code_urls:
     # Load group page and get soup
     soup = soup_engine.soup_from_url(url + url_view_embed)
     # Parse code page
-    parsed_tags = soup_engine.dict_from_soup(soup)
+    parsed_tags = soup_engine.dict_from_soup(soup, constants.PARSE_DICT)
     parsed_tags[constants.DICT_URL] = url
     # Append to array
     dsn_code_dictionaries.append(parsed_tags)
@@ -72,6 +73,7 @@ for url in dsn_code_urls:
 # Write to file
 file_name = 'dsm_codes'
 print('Writing parsed codes to file with name ' + file_name)
-soup_engine.write_soup_engine_dict_to_files(dsn_code_dictionaries, file_name)
+soup_engine.write_soup_engine_dict_to_files(
+    dsn_code_dictionaries, constants.PARSE_DICT, file_name)
 
 profile.end()

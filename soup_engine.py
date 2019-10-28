@@ -25,7 +25,7 @@ def soup_from_url(url):
     return soup
 
 
-def dict_from_soup(soup):
+def dict_from_soup(soup, PARSE_DICT):
     """
     This method takes a soup (A parsed html page into a python object) and extracts the information
     information from the page and returns it in a dictionary
@@ -34,9 +34,12 @@ def dict_from_soup(soup):
     # Check if we find the span tag on the page because not all pages have a span tags
 
     parsed_dict = {}
-    for dictionary in constants.PARSE_DICT:
-        tag = soup.find(dictionary[constants.DICT_TAG],
-                        class_=dictionary[constants.DICT_CLASS])
+    for dictionary in PARSE_DICT:
+        _tag = dictionary[constants.DICT_TAG]
+        _class = dictionary[constants.DICT_CLASS]
+
+        tag = soup.find(_tag,
+                        class_=_class)
 
         if tag:
             if dictionary[constants.DICT_CLASS] == 'msgId' or dictionary[constants.DICT_CLASS] == 'msgText':
@@ -146,7 +149,7 @@ def str_is_not_empty(string):
     return not str_is_empty(string)
 
 
-def write_soup_engine_dict_to_files(dictionaries, file_name):
+def write_soup_engine_dict_to_files(dictionaries, PARSE_DICT, file_name):
     """
     Formats and writes the dictionary out to a text file with the specified name
     and timestamp.
@@ -174,16 +177,15 @@ def write_soup_engine_dict_to_files(dictionaries, file_name):
             # Write out Code
             output_string += 'Code\n'
             code_string = dictionary['number'][0]['content']
-            
+
             if len(dictionary['msg_text']) > 0:
                 code_string += ' ' + dictionary['msg_text'][0]['content']
 
             output_string += wrapper.fill(code_string)
             output_string += '\n\n'
 
-
             # Write out sections
-            for key in constants.PARSE_DICT[2:]:
+            for key in PARSE_DICT[2:]:
                 string = format_dict_to_string(
                     '', '  ', dictionary[key[constants.DICT_KEY]])
                 string_len = len(string)

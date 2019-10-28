@@ -12,13 +12,17 @@ import json
 
 ############ CONSTANTS ############
 
-url = 'https://www.ibm.com/support/knowledgecenter/SSEPEK_12.0.0/codes/src/tpc/n159.html'
+url = 'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/dp12702.htm'
 
 add_embed = True
 if add_embed:
     url = url + '?view=embed'
 
+# This array of dictionaries describes what the soup engine is looking for
+PARSE_DICT = constants.SYSTEM_MESSAGES_PARSE_DICT
+
 ############ END CONSTANTS ############
+
 
 def print_section(section, spacing=''):
     # Begin looping and writing to the file
@@ -29,7 +33,7 @@ def print_section(section, spacing=''):
         item_type = item.get('type', None)
         item_content = item.get('content', None)
         item_children = item.get('children', None)
-        
+
         prefix = ''
         if item_type == 'bullet':
             prefix = '- '
@@ -49,20 +53,19 @@ def print_section(section, spacing=''):
 ############ PROGRAM ############
 
 soup = soup_engine.soup_from_url(url)
-parsed_tags = soup_engine.dict_from_soup(soup)
+parsed_tags = soup_engine.dict_from_soup(
+    soup, PARSE_DICT)
 parsed_tags[constants.DICT_URL] = url
 dictionaries = [parsed_tags]
 
 for dictionary in dictionaries:
     print('**start section**')
-    
-    for parse_dict in constants.PARSE_DICT:
+
+    for parse_dict in PARSE_DICT:
         section_array = dictionary[parse_dict[constants.DICT_KEY]]
         if parse_dict[constants.DICT_KEY] == constants.DICT_URL:
             print(section_array)
         else:
             print_section(section_array)
-        
+
     print('**end section**')
-
-

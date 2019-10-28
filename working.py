@@ -14,19 +14,22 @@ import constants
 # TODO URLS
 # https://www.ibm.com/support/knowledgecenter/SSEPEK_12.0.0/codes/src/tpc/n181.html
 
-url = 'https://www.ibm.com/support/knowledgecenter/SSEPEK_12.0.0/msgs/src/tpc/db2z_msgshowtoread.html?view=embed'
+url = 'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/gg278i.htm'
 
 add_embed = True
 if add_embed:
     url = url + '?view=embed'
+
+PARSE_DICT = constants.SYSTEM_MESSAGES_PARSE_DICT
 
 ############ END CONSTANTS ############
 
 ############ PROGRAM ############
 
 soup = soup_engine.soup_from_url(url)
-parsed_tags = soup_engine.dict_from_soup(soup)
+parsed_tags = soup_engine.dict_from_soup(soup, PARSE_DICT)
 parsed_tags[constants.DICT_URL] = url
 dictionaries = [parsed_tags]
-soup_engine.write_soup_engine_dict_to_files(dictionaries, 'codes')
+soup_engine.write_soup_engine_dict_to_files(
+    dictionaries, PARSE_DICT, 'codes')
 soup_engine.write_soup_engine_dict_to_json_files(dictionaries, 'codes')
