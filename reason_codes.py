@@ -6,9 +6,8 @@ import profile
 import constants
 import progress_bar
 
-page_url = 'https://www.ibm.com/support/knowledgecenter/SSEPEK_12.0.0/codes/src/tpc/db2z_reasoncodes.html?view=embed'
-url_base = "https://www.ibm.com/support/knowledgecenter/SSEPEK_12.0.0/codes/"
-url_view_embed = "?view=embed"
+page_url = 'https://www.ibm.com/docs/en/db2-for-zos/13?topic=codes-db2-reason'
+url_base = "https://www.ibm.com/docs/en/SSEPEK_13.0.0/codes/"
 
 # Program profiling. Save starting time
 profile.start()
@@ -18,7 +17,7 @@ main_page_soup = soup_engine.soup_from_url(page_url)
 
 # Find all links to reason code groups
 main_page_link_spans = main_page_soup.find_all(
-    'span', class_="ulchildlinktext")
+    'li', class_="ulchildlink")
 
 # Array for each of the reason code pages
 reason_code_urls = []
@@ -34,11 +33,11 @@ for span in main_page_link_spans:
 
     # Load group page and get soup
     child_page_soup = soup_engine.soup_from_url(
-        url_base + group_url + url_view_embed)
+        url_base + group_url)
 
     # Get the links to the individual code pages
     child_page_link_spans = child_page_soup.find_all(
-        'span', class_="ulchildlinktext")
+        'li', class_="ulchildlink")
 
     for span in child_page_link_spans:
         a_tag = span.find("a")
@@ -58,7 +57,7 @@ print('Scrape Pages')
 # Scrape the reason code pages=
 for url in reason_code_urls:
     # Load group page and get soup
-    soup = soup_engine.soup_from_url(url + url_view_embed)
+    soup = soup_engine.soup_from_url(url)
     # Parse code page
     parsed_tags = soup_engine.dict_from_soup(soup, constants.PARSE_DICT)
     parsed_tags[constants.DICT_URL] = url

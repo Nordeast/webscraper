@@ -14,13 +14,9 @@ import constants
 # TODO URLS
 # https://www.ibm.com/support/knowledgecenter/SSEPEK_12.0.0/codes/src/tpc/n181.html
 
-url = 'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/gg278i.htm'
+url = 'https://www.ibm.com/docs/en/db2-for-zos/13?topic=codes-396'
 
-add_embed = True
-if add_embed:
-    url = url + '?view=embed'
-
-PARSE_DICT = constants.SYSTEM_MESSAGES_PARSE_DICT
+PARSE_DICT = constants.PARSE_DICT
 
 ############ END CONSTANTS ############
 

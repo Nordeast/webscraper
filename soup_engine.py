@@ -72,9 +72,12 @@ def parse_tag(tag, parent=None, parsed_tags=[]):
         is_string = type(
             content) is bs4.element.NavigableString and str_is_not_empty(str(content))
 
-        # Check if it a html tag that is a wrapper for a string
+        # Check if a html tag that is a wrapper for a string
         is_text_tag = False
         if is_tag:
+            # Can skip the section title as we have that covered
+            if content.has_attr('class') and 'sectiontitle' in content['class']:
+                continue
             is_text_tag = str(content.name) in text_tags
 
         if is_string or is_text_tag:
