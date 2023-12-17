@@ -1,6 +1,5 @@
 import time
 import calendar
-import requests
 import bs4
 from bs4 import BeautifulSoup
 import constants
@@ -9,7 +8,7 @@ import os
 import json
 import math
 import textwrap
-
+from requests_html import HTMLSession
 
 def soup_from_url(url):
     """This method takes a browser instance and a url. It then navigates to the page, pulls the html from it
@@ -18,10 +17,14 @@ def soup_from_url(url):
 
     # Being a good citizen during webscraping means only making 1 request per second.
     time.sleep(1)
+
     # Get page from url
-    response = requests.get(url)
+    session = HTMLSession()
+    response = session.get(url)
+    response.html.render()
+
     # parse the html using beautiful soup and store in variable `soup`
-    soup = BeautifulSoup(response.content, 'html.parser')
+    soup = BeautifulSoup(response.html.html, 'html.parser')
     return soup
 
 
