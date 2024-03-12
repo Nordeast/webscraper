@@ -1,14 +1,12 @@
 import time
 import calendar
-import bs4
-from bs4 import BeautifulSoup
-import constants
-import collections
 import os
 import json
-import math
 import textwrap
+import bs4
+from bs4 import BeautifulSoup
 from requests_html import HTMLSession
+import constants
 
 def soup_from_url(url):
     """This method takes a browser instance and a url. It then navigates to the page, pulls the html from it
@@ -18,16 +16,28 @@ def soup_from_url(url):
     # Being a good citizen during webscraping means only making 1 request per second.
     time.sleep(1)
 
-    # Get page from url
-    session = HTMLSession()
-    response = session.get(url)
-    response.html.render()
+    continueTrying = True
+    tries = 1
+    while continueTrying:
+        try:
+            # Get page from url
+            session = HTMLSession()
+            response = session.get(url)
+            response.html.render()
 
-    # parse the html using beautiful soup and store in variable `soup`
-    soup = BeautifulSoup(response.html.html, 'html.parser')
-    session.close()
-    return soup
-
+            # parse the html using beautiful soup and store in variable `soup`
+            soup = BeautifulSoup(response.html.html, 'html.parser')
+            session.close()
+            return soup
+        except Exception as error:
+            print(error + '\n')
+            print('trying again ' + tries + '\n')
+            if (tries > 3):
+                continueTrying = False
+            tries += 1
+            # Lets wait a few seconds and then try again
+            time.sleep(10 * tries)
+    raise Exception('Getting Soup Failed after 3 tries.')
 
 def dict_from_soup(soup, PARSE_DICT):
     """

@@ -15,7 +15,7 @@ url_base = "https://www.ibm.com/docs/en/SSEPEK_13.0.0/codes/"
 ############ PROGRAM ############
 
 # Program profiling
-profile.start()
+profiler.start()
 
 # Array to store the reason code dictionaries once they have been scraped
 sql_code_dictionaries = []
@@ -60,6 +60,6 @@ soup_engine.write_soup_engine_dict_to_files(
 #### END SCRAPE ####
 
 # End Program profiling
-profile.end()
+profiler.end()
 
 ############ END PROGRAM ############

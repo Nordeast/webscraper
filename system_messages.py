@@ -39,7 +39,7 @@ PARSE_DICT = constants.SYSTEM_MESSAGES_PARSE_DICT
 ############ PROGRAM ############
 
 # Program profiling
-profile.start()
+profiler.start()
 
 # Array to store the reason code dictionaries once they have been scraped
 parsed_dictionaries = []
@@ -85,6 +85,6 @@ soup_engine.write_soup_engine_dict_to_files(
 #### END SCRAPE ####
 
 # End Program profiling
-profile.end()
+profiler.end()
 
 ############ END PROGRAM ############
