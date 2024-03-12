@@ -25,6 +25,7 @@ def soup_from_url(url):
 
     # parse the html using beautiful soup and store in variable `soup`
     soup = BeautifulSoup(response.html.html, 'html.parser')
+    session.close()
     return soup
 
 
