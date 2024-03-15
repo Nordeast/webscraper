@@ -12,9 +12,9 @@ import json
 
 ############ CONSTANTS ############
 
-url = 'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/dp12702.htm'
+url = 'https://www.ibm.com/docs/en/zos/3.1.0?topic=messages-igdh1000i#idg90881'
 
-add_embed = True
+add_embed = False
 if add_embed:
     url = url + '?view=embed'
 

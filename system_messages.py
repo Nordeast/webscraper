@@ -2,7 +2,7 @@
 # import libraries
 from bs4 import BeautifulSoup
 import soup_engine
-import profile
+import profiler
 import constants
 import progress_bar
 
@@ -10,30 +10,29 @@ import progress_bar
 # and here https://stanford.edu/~mgorkove/cgi-bin/rpython_tutorials/Scraping_a_Webpage_Rendered_by_Javascript_Using_Python.php
 
 urls = [
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/iea3m8_IEF_messages.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/iea3m8_IEFA_messages.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/iefa.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/iea3m8_IEFC_messages.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/iea3m8_IEFE_messages.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/iea3m8_IEFI_messages.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/iea3m8_IEFJ_messages.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/iea3m8_IEH_messages.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/iea3m8_IEW0000_-_0999.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/iea3m8_IEW1001_-_1999.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/pmbmes.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/pmbmes1.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/pmbmes2.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/iew5.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/iea3m8_IFA_messages.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/iea3m8_IFB_messages.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/iea3m8_IFC_messages.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/iea3m8_IGD_messages.htm?view=embed',
-    'https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/iea3m8_IGDH_messages.htm?view=embed'
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-ief-messages',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-iefa-messages',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-iefah-messages',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-iefc-messages',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-iefe-messages',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-iefi-messages',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-iefj-messages',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-ieh-messages',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-iew-messages-iew0000-iew0999',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-iew-messages-iew1001-iew1999',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-iew-messages-iew2001-iew2999',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-iew-messages-iew3000-iew3999',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-iew-messages-iew4000-iew4999',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-iew-messages-iew5000-iew5057',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-ifa-messages',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-ifb-messages',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-ifc-messages',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-messages',
+    'https://www.ibm.com/docs/en/zos/3.1.0?topic=igd-igdh-messages'
 ]
 
-url_base = "https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.1.0/com.ibm.zos.v2r1.ieam800/"
+URL_BASE = "https://www.ibm.com/docs/en/SSLTBW_3.1.0/com.ibm.zos.v3r1.ieam800/"
 
-url_view_embed = "?view=embed"
 PARSE_DICT = constants.SYSTEM_MESSAGES_PARSE_DICT
 
 ############ PROGRAM ############
@@ -43,6 +42,7 @@ profiler.start()
 
 # Array to store the reason code dictionaries once they have been scraped
 parsed_dictionaries = []
+child_urls = []
 
 #### START SCRAPE ####
 for link in urls:
@@ -51,36 +51,36 @@ for link in urls:
     # Get the main page of the reason codes parsed into a BeautifulSoup instance
     main_page_soup = soup_engine.soup_from_url(link)
     # Find all links to reason code groups
-    main_page_link_spans = main_page_soup.find_all(
-        'span', class_="ulchildlinktext")
+    main_page_link_list_items = main_page_soup.find_all(
+        'li', class_="ulchildlink")
 
-    index = 1
-    total_length = len(main_page_link_spans)
-
-    for span in main_page_link_spans:
-        a_tag = span.find("a")
+    for list_item in main_page_link_list_items:
+        a_tag = list_item.find("a")
         parsed_url = a_tag['href'].replace("../../", "")
         parsed_url = parsed_url.split('#', 1)[0]
 
         # Load group page and get soup
-        url = url_base + parsed_url
-        soup = soup_engine.soup_from_url(url + url_view_embed)
-        # Parse code page
-        parsed_tags = soup_engine.dict_from_soup(soup, PARSE_DICT)
-        parsed_tags[constants.DICT_URL] = url
-        # Append to array
-        parsed_dictionaries.append(parsed_tags)
+        child_urls.append(URL_BASE + parsed_url)
 
-        progress_bar.print(index, total_length, 'Progress',
-                           '(' + str(index) + '/' + str(total_length) + ') Pages Scraped')
-        index += 1
+INDEX = 1
+TOTAL_LENGTH = len(child_urls)
+for url in child_urls:
+    soup = soup_engine.soup_from_url(url)
+    # Parse code page
+    parsed_tags = soup_engine.dict_from_soup(soup, PARSE_DICT)
+    parsed_tags[constants.DICT_URL] = url
+    # Append to array
+    parsed_dictionaries.append(parsed_tags)
 
+    progress_bar.print(INDEX, TOTAL_LENGTH, 'Progress',
+                        '(' + str(INDEX) + '/' + str(TOTAL_LENGTH) + ') Pages Scraped')
+    INDEX += 1
 
 # Write to file
-file_name = 'system_messages'
-print('Writing parsed pages to file with name ' + file_name)
+FILE_NAME = 'system_messages'
+print('Writing parsed pages to file with name ' + FILE_NAME)
 soup_engine.write_soup_engine_dict_to_files(
-    parsed_dictionaries, PARSE_DICT, file_name)
+    parsed_dictionaries, PARSE_DICT, FILE_NAME)
 
 #### END SCRAPE ####
 
